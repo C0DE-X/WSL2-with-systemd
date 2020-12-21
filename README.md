@@ -108,7 +108,8 @@ Add a task to windows to start pulseaudio server on user login
 Right click on the task and go to properties.\
 Check Invisible and for Windows 10
 
-Log off and in again and check the status of the task.
+Run bin\pulseaudio.exe in terminal to access network rules and accept for both privat and public. Close application and log out and in again and check the status of the task. \
+Pulseaudio-device should now be available in WSL.
 
 # Custom Kernel
 
