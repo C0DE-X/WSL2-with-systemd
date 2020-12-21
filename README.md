@@ -28,10 +28,10 @@ Reboot wsl and start your distro. It gets started with the user you created.
 WSL --shutdown
 wsl -d <DISTRO>
 ```
-*use -u root* to run as root
+*use -u root* to login as root
 # Install desktop environment
 
-Tested desktop environments with X410 as xserver. (https://x410.dev/)
+Tested desktop environments for ubuntu with X410 as xserver. (https://x410.dev/)
 ## XFCE
 ```bash
 sudo apt update && sudo apt -y upgrade
@@ -75,9 +75,10 @@ To start xfce after login use
 startplasma
 ```
 # Pulseaudio
-Under Windows download the pulseaudio zip file. https://www.freedesktop.org/wiki/Software/PulseAudio/Ports/Windows/Support/
+Under Windows download the pulseaudio zip file. https://www.freedesktop.org/wiki/Software/PulseAudio/Ports/Windows/Support/ and unzip it in the directory you want it to run.
 
-in the directory in etc/pulse/default.pa \
+## Changes
+In the file etc/pulse/default.pa \
 change line 42
 ```diff
 - load-module module-waveout sink_name=output source_name=input
@@ -89,7 +90,7 @@ change line 62
 + load-module module-native-protocol-tcp auth-ip-acl=0.0.0.0 auth-anonymous=1
 ```
 
-in the directory in etc/pulse/deamon.conf \
+in the file etc/pulse/deamon.conf \
 change line 39
 ```diff
 - ; exit-idle-time = 20
@@ -109,7 +110,7 @@ Right click on the task and go to properties.\
 Check Invisible and for Windows 10
 
 Run bin\pulseaudio.exe in terminal to access network rules and accept for both privat and public. Close application and log out and in again and check the status of the task. \
-Pulseaudio-device should now be available in WSL.
+Pulseaudio-device should now be available in WSL. The changes to access the pulseaudio-server from wsl are already made in the wslsetup script (*export PULSE_SERVER=tcp:$NAMESERVER* in bash.bashrc). 
 
 # Custom Kernel
 
