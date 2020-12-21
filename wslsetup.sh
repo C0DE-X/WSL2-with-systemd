@@ -176,4 +176,6 @@ sudo rm -f /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.auto
 sudo rm -f /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.mount
 sudo rm -f /lib/systemd/system/sysinit.target.wants/systemd-binfmt.service
 
+echo "******************************************"
 echo "WSL system setup done"
+echo "******************************************"

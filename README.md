@@ -74,6 +74,41 @@ To start xfce after login use
 ```bash
 startplasma
 ```
+# Pulseaudio
+Under Windows download the pulseaudio zip file. https://www.freedesktop.org/wiki/Software/PulseAudio/Ports/Windows/Support/
+
+in the directory in etc/pulse/default.pa \
+change line 42
+```diff
+- load-module module-waveout sink_name=output source_name=input
++ load-module module-waveout sink_name=output source_name=input record=0
+```
+change line 62
+```diff
+- #load-module module-native-protocol-tcp
++ load-module module-native-protocol-tcp auth-ip-acl=0.0.0.0 auth-anonymous=1
+```
+
+in the directory in etc/pulse/deamon.conf \
+change line 39
+```diff
+- ; exit-idle-time = 20
++ exit-idle-time = -1
+```
+
+### Pulseaudio task
+Add a task to windows to start pulseaudio server on user login
+- Open Windows Task Scheduler and create task
+- Name: pulseaudio
+- Trigger: on user login
+- Action: Start program
+- Program: <path\to\pulseaudio\bin\pulseaudio.exe>
+    - Arguments: -D
+
+Right click on the task and go to properties.\
+Check Invisible and for Windows 10
+
+Log off and in again and check the status of the task.
 
 # Custom Kernel
 
