@@ -1,6 +1,7 @@
 #!/bin/bash
-
-echo "Start wsl setup"
+echo "******************************************"
+echo "Starting wsl setup"
+echo "******************************************"
 
 # create user
 echo "Create user"
@@ -11,7 +12,7 @@ passwd ${USERNAME}
 
 # udpate and install packages
 sudo apt update && sudo apt upgrade -y
-sudo apt update && sudo apt install -yqq daemonize dbus-user-session fontconfig
+sudo apt update && sudo apt install -yqq wsl daemonize dbus-user-session fontconfig
 sudo apt install --reinstall snapd
 
 # create wsl config
@@ -67,6 +68,9 @@ ResultInactive=yes
 ResultActive=yes
 EOF
 
+echo "******************************************"
+echo "Setting up systemd"
+echo "******************************************"
 ## create systemd-namespace scripts
 # systemd start script
 sudo cat >> /usr/sbin/start-systemd-namespace <<EOF
@@ -127,8 +131,7 @@ SYSTEMD_PID="\$(ps -eo pid=,args= | awk '\$2" "\$3=="'"\$SYSTEMD_EXE"'" {print \
 if [ -z "\$SYSTEMD_PID" ]; then
     "\$DAEMONIZE" /usr/bin/unshare --fork --pid --mount-proc bash -c 'export container=wsl; mount -t binfmt_misc binfmt_misc /proc/sys/fs/binfmt_misc; exec '"\$SYSTEMD_EXE"
     while [ -z "\$SYSTEMD_PID" ]; do
-        echo "Waiting for systemd..."
-        sleep 3
+        sleep 1
         SYSTEMD_PID="\$(ps -eo pid=,args= | awk '\$2" "\$3=="'"\$SYSTEMD_EXE"'" {print \$1}')"
     done
 fi
@@ -144,7 +147,7 @@ if [ -n "\$SYSTEMD_PID" ] && [ "\$SYSTEMD_PID" != "1" ]; then
             /bin/login -p -f "\$SUDO_USER" \
             \$([ -f "\$USER_HOME/.systemd-env" ] && /bin/cat "\$USER_HOME/.systemd-env" | xargs printf ' %q')
     fi
-    echo "Existential crisis"
+    echo "Error: unable to use systemd"
     exit 1
 fi
 EOF
@@ -159,8 +162,9 @@ source /usr/sbin/start-systemd-namespace \
 for i in \$(ls /etc/systemd/system/*.mount); do sudo systemctl start \$(basename \$i); done' /etc/bash.bashrc
 
 sudo tee -a /etc/bash.bashrc >/dev/null <<EOF
-export DISPLAY=192.168.178.220:0
-export PULSE_SERVER=tcp:192.168.178.220
+NAMESERVER=$(cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f 2)
+export DISPLAY=$NAMESERVER:0
+export PULSE_SERVER=tcp:$NAMESERVER
 export DONT_PROMPT_WSL_INSTALL=1
 EOF
 

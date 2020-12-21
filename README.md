@@ -6,33 +6,38 @@ Tested on Ubuntu 20.04 and 20.10
 Download image from https://cloud-images.ubuntu.com/ and import it on wsl
 
 ```bash
-wsl --import DISTRO TARGETLOCATION ROOTFS
+wsl --import <DISTRO> <TARGETLOCATION> <ROOTFS>
 ```
+- DISTRO: name you want to call your distro
+- TARGETLOCATION: path where the vhdx file should be placed
+- ROOTFS: full path of the rootfs image you want to import
+
 # Setup
 Login and run the wslsetup script
 
 ```bash
-wsl -d DISTRO
+wsl -d <DISTRO>
 ```
 Start the script with sudo
 ```bash
 chmod +x wslsetup.sh
 sudo ./wslsetup.sh
 ```
-Reboot wsl and start your distro with your created user
+Reboot wsl and start your distro. It gets started with the user you created.
 ```bash
 WSL --shutdown
-wsl -d DISTRO
+wsl -d <DISTRO>
 ```
-
+*use -u root* to run as root
 # Install desktop environment
 
+Tested desktop environments with X410 as xserver. (https://x410.dev/)
 ## XFCE
 ```bash
 sudo apt update && sudo apt -y upgrade
 sudo apt install xfce4 xfce4-terminal xfce4-goodies -y
 ```
-Select Lightdm when asked
+Select lightdm when asked
 ### Create startscript
 To reduce terminal output use follwing steps
 
@@ -89,16 +94,16 @@ mkdir <path/to/kernel/dir/>
 cp vmlinux <path/to/kernel/dir/>
 ```
 
-Add it to global wsl conf in C:\User\<USER>\.wslconfig
+Add it to global wsl conf in C:\User\\<USER>\\.wslconfig
 ```
 [wsl2]
-kernel=<DRIVE:\\path\\to\\kernel\\dir\\vmlinux\\>
+kernel=<DRIVE:\\path\\to\\kernel\\dir\\vmlinux>
 ```
 *Be sure to use "\\\\" in your path.*
 
 Now restart WSL and check the kernel version
 ```
 wsl --shutdown
-wsl -d <distribution>
+wsl -d <DISTRO>
 uname -a
 ```
