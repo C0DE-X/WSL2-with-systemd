@@ -68,9 +68,7 @@ ResultInactive=yes
 ResultActive=yes
 EOF
 
-echo "******************************************"
-echo "Setting up systemd"
-echo "******************************************"
+echo "Setting up systemd ..."
 ## create systemd-namespace scripts
 # systemd start script
 sudo cat >> /usr/sbin/start-systemd-namespace <<EOF
@@ -162,9 +160,9 @@ source /usr/sbin/start-systemd-namespace \
 for i in \$(ls /etc/systemd/system/*.mount); do sudo systemctl start \$(basename \$i); done' /etc/bash.bashrc
 
 sudo tee -a /etc/bash.bashrc >/dev/null <<EOF
-NAMESERVER=$(cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f 2)
-export DISPLAY=$NAMESERVER:0
-export PULSE_SERVER=tcp:$NAMESERVER
+NAMESERVER=\$(cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f 2)
+export DISPLAY=\$NAMESERVER:0
+export PULSE_SERVER=tcp:\$NAMESERVER
 export DONT_PROMPT_WSL_INSTALL=1
 EOF
 
@@ -176,6 +174,7 @@ sudo rm -f /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.auto
 sudo rm -f /lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.mount
 sudo rm -f /lib/systemd/system/sysinit.target.wants/systemd-binfmt.service
 
+echo "...done"
 echo "******************************************"
 echo "WSL system setup done"
 echo "******************************************"
