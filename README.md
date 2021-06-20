@@ -144,3 +144,11 @@ wsl --shutdown
 wsl -d <DISTRO>
 uname -a
 ```
+
+# Issues
+## systemd-remount-fs.service fails
+Add following line to the [Unit] section of the service file located under
+/lib/systemd/system/systemd-remount-fs.service
+```
+ConditionVirtualization=!container
+```
