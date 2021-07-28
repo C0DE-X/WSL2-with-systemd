@@ -145,6 +145,17 @@ wsl -d <DISTRO>
 uname -a
 ```
 
+# USB MOUNT
+
+WSL can mount and use hardware external drives formatted as FAT, ExFAT or NTFS. If Windows changes the external drive letter on a subsequent session, you need to repeat this process.
+
+Create a mount location in WSL and mount the drive with following commands in WSL (assume the drive is shown in Windows as “H:"):
+
+```
+mkdir /mnt/h
+
+mount -t drvfs h: /mnt/h
+```
 # Issues
 ## systemd-remount-fs.service fails
 Add following line to the [Unit] section of the service file located under
